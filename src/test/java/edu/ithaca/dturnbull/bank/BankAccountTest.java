@@ -27,26 +27,26 @@ class BankAccountTest {
         assertTrue(BankAccount.isEmailValid( "a@b.com"));   // valid email address
         assertFalse( BankAccount.isEmailValid(""));         // empty string
 
-        assertFalse( BankAccount.isEmailValid("abc-@mail.com"));  
-        assertFalse( BankAccount.isEmailValid("abc..def@mail.com"));  
-        assertFalse( BankAccount.isEmailValid(".abc@mail.com"));  
-        assertFalse( BankAccount.isEmailValid("abc#def@mail.com"));  
+        assertFalse( BankAccount.isEmailValid("abc-@mail.com"));  // invalid, special char at end of local part, not boundary case
+        assertFalse( BankAccount.isEmailValid("abc..def@mail.com"));  //invalid, 2 dots in a row, not boundary case
+        assertFalse( BankAccount.isEmailValid(".abc@mail.com"));  // invalid, starts with dot, not boundary case
+        assertFalse( BankAccount.isEmailValid("abc#def@mail.com"));  // invalid, unallowed special char, not boundary case
 
-        assertTrue( BankAccount.isEmailValid("abc-d@mail.com"));  
-        assertTrue( BankAccount.isEmailValid("abc.def@mail.com"));  
-        assertTrue( BankAccount.isEmailValid("abc@mail.com"));  
-        assertTrue( BankAccount.isEmailValid("abc_def@mail.com"));
+        assertTrue( BankAccount.isEmailValid("abc-d@mail.com"));  // valid, special char in middle of local part, boundary case
+        assertTrue( BankAccount.isEmailValid("abc.def@mail.com"));  // valid, special char in middle of local part, boundary case
+        assertTrue( BankAccount.isEmailValid("abc@mail.com"));  // valid, no special char, not boundary case
+        assertTrue( BankAccount.isEmailValid("abc_def@mail.com")); // valid, underscore in middle of local part, boundary case
         
-        assertFalse( BankAccount.isEmailValid("abc.def@mail.c"));  
-        assertFalse( BankAccount.isEmailValid("abc.def@mail#archive.com"));  
-        assertFalse( BankAccount.isEmailValid("abc.def@mail"));  
-        assertFalse( BankAccount.isEmailValid("abc.def@mail..com"));
+        assertFalse( BankAccount.isEmailValid("abc.def@mail.c"));  //invalid, domain too short, not boundary case
+        assertFalse( BankAccount.isEmailValid("abc.def@mail#archive.com"));  // invalid, unallowed special char, not boundary case
+        assertFalse( BankAccount.isEmailValid("abc.def@mail"));  // invalid, no top-level domain, not boundary case
+        assertFalse( BankAccount.isEmailValid("abc.def@mail..com")); // invalid, 2 dots in a row, not boundary case
 
-        assertTrue( BankAccount.isEmailValid("abc.def@mail.cc"));  
-        assertTrue( BankAccount.isEmailValid("abc.def@mail-archive.com"));  
-        assertTrue( BankAccount.isEmailValid("abc.def@mail.org"));  
-        assertTrue( BankAccount.isEmailValid("abc.def@mail.com"));
-        
+        assertTrue( BankAccount.isEmailValid("abc.def@mail.cc"));  // valid, two letter top-level domain, boundary case
+        assertTrue( BankAccount.isEmailValid("abc.def@mail-archive.com"));  // valid, hyphen in middle of domain name, boundary case
+        assertTrue( BankAccount.isEmailValid("abc.def@mail.org"));  // valid, three letter top-level domain, not boundary case
+        assertTrue( BankAccount.isEmailValid("abc.def@mail.com")); // valid, common top-level domain, not boundary case
+        // no tests for lengths
     }
 
     @Test
