@@ -43,14 +43,13 @@ class BankAccountTest {
 
     @Test
     void isAmountValidTest(){
+        // equivalence class: amount of decimal places
         // no decimal places
         float amount = 100;
         assertTrue(BankAccount.isAmountValid(amount));
-
         // one decimal place
         amount = (float) 100.1;
         assertTrue(BankAccount.isAmountValid(amount));
-
         // two decimal places
         amount = (float) 100.11;
         assertTrue(BankAccount.isAmountValid(amount));
@@ -60,7 +59,7 @@ class BankAccountTest {
         amount = (float) 100.111;
         assertFalse(BankAccount.isAmountValid(amount));
 
-        // sign
+        // equivalence class: sign
         amount = (float) 100.00;
         assertTrue(BankAccount.isAmountValid(amount));
         amount = (float) 0.00;
@@ -127,6 +126,10 @@ class BankAccountTest {
         assertEquals(200, bankAccount.getBalance(), 0.001);
         //check for exception thrown correctly
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));
+
+        //new tests
+        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("a@b.com", -100));
+        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("a@b.com", 100.11));
     }
 
 }
