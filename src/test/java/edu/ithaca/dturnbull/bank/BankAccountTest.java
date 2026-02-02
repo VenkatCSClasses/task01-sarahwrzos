@@ -7,10 +7,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class BankAccountTest {
 
     @Test
-    void getBalanceTest() {
+    void getBalanceTest() throws InsufficientFundsException {
+        // Test positive balance
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
-
         assertEquals(200, bankAccount.getBalance(), 0.001);
+
+        // Test zero balance
+        BankAccount bankAccountZero = new BankAccount("zero@test.com", 0);
+        assertEquals(0, bankAccountZero.getBalance(), 0.001);
+
+        // Test negative balance (allowed by constructor)
+        BankAccount bankAccountNegative = new BankAccount("negative@test.com", -50);
+        assertEquals(-50, bankAccountNegative.getBalance(), 0.001);
+
+        // Test balance after withdrawal
+        bankAccount.withdraw(50);
+        assertEquals(150, bankAccount.getBalance(), 0.001);
+
+        // multiple calls return same value
+        assertEquals(150, bankAccount.getBalance(), 0.001);
+        assertEquals(150, bankAccount.getBalance(), 0.001);
     }
 
     @Test
