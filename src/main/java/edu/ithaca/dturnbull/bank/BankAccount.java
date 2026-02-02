@@ -43,39 +43,30 @@ public class BankAccount {
 
 
     public static boolean isEmailValid(String email){
-        if (email == null || email.isEmpty()) {
-            return false;
+        if (email == null || email.trim().isEmpty()) return false;
+        String trimmed = email.trim();
+        if (trimmed.indexOf('@') == -1 || trimmed.indexOf('@', trimmed.indexOf('@') + 1) != -1) return false;
+        String[] parts = trimmed.split("@");
+        String local = parts[0];
+        String domain = parts[1];
+        if (local.isEmpty() || domain.isEmpty()) return false;
+        if (local.startsWith(".") || local.endsWith(".") || local.startsWith("-") || local.endsWith("-")) return false;
+        if (local.contains("..")) return false;
+        for (char c : local.toCharArray()) {
+            if (!Character.isLetterOrDigit(c) && c != '.' && c != '_' && c != '%' && c != '+' && c != '-') return false;
         }
-        email = email.trim();
-
-        int atSymbolCount = 0;
-        int atIndex = -1;
-        for (int i = 0; i < email.length(); i++) {
-            if (email.charAt(i) == '@') {
-                atSymbolCount++;
-                atIndex = i;
+        if (!domain.contains(".")) return false;
+        String[] labels = domain.split("\\.");
+        for (String label : labels) {
+            if (label.isEmpty()) return false;
+            if (label.startsWith("-") || label.endsWith("-")) return false;
+            for (char c : label.toCharArray()) {
+                if (!Character.isLetterOrDigit(c) && c != '-') return false;
             }
         }
-        if (atSymbolCount != 1) {
-            return false;
-        }
-
-        String local = email.substring(0, atIndex);
-        String domain = email.substring(atIndex + 1);
-
-        if (!isValidLocal(local)) {
-            return false;
-        }
-
-        if (!isValidDomain(domain)) {
-            return false;
-        }
-
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +
-                            "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(email).matches();
-        
+        String tld = labels[labels.length - 1];
+        if (tld.length() < 2) return false;
+        return true;
     }
 
     private static boolean isValidLocal(String local) {
