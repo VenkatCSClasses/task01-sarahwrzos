@@ -1,7 +1,4 @@
 package edu.ithaca.dturnbull.bank;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.ArrayList;
 
 public class BankAccount {
 
@@ -46,6 +43,22 @@ public class BankAccount {
         }
     }
 
+    /**
+     * 
+     * @param amount
+     * @return true if amount is positive and has two decimal points or less, false otherwise
+     */
+    public static boolean isAmountValid(float amount){
+        float scaled = amount * 100;
+        boolean decimal = Math.abs(scaled - Math.round(scaled)) < 0.0001;
+
+        if (amount >= 0 && decimal){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     public static boolean isEmailValid(String email){
         if (email == null || email.trim().isEmpty()) return false;

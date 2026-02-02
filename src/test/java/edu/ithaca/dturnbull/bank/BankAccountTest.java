@@ -42,6 +42,35 @@ class BankAccountTest {
     }
 
     @Test
+    void isAmountValidTest(){
+        // no decimal places
+        float amount = 100;
+        assertTrue(BankAccount.isAmountValid(amount));
+
+        // one decimal place
+        amount = (float) 100.1;
+        assertTrue(BankAccount.isAmountValid(amount));
+
+        // two decimal places
+        amount = (float) 100.11;
+        assertTrue(BankAccount.isAmountValid(amount));
+        
+
+        // three decimal places
+        amount = (float) 100.111;
+        assertFalse(BankAccount.isAmountValid(amount));
+
+        // sign
+        amount = (float) 100.00;
+        assertTrue(BankAccount.isAmountValid(amount));
+        amount = (float) 0.00;
+        assertTrue(BankAccount.isAmountValid(amount));
+        amount = (float) -100.00;
+        assertFalse(BankAccount.isAmountValid(amount));
+
+    }
+
+    @Test
     void isEmailValidTest(){
         // equivalence classes
             // number of characters (empty string, shortest possible valid email, max length)
