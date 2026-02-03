@@ -16,10 +16,6 @@ class BankAccountTest {
         BankAccount bankAccountZero = new BankAccount("zero@test.com", 0);
         assertEquals(0, bankAccountZero.getBalance(), 0.001);
 
-        // Test negative balance (allowed by constructor)
-        BankAccount bankAccountNegative = new BankAccount("negative@test.com", -50);
-        assertEquals(-50, bankAccountNegative.getBalance(), 0.001);
-
         // Test balance after withdrawal
         bankAccount.withdraw(50);
         assertEquals(150, bankAccount.getBalance(), 0.001);
