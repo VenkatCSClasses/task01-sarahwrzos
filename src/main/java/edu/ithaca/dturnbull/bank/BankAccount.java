@@ -94,96 +94,40 @@ public class BankAccount {
         }
     }
 
-    public static boolean isEmailValid(String email){
-        if (email == null || email.trim().isEmpty()) return false;
+    public static boolean isEmailValid(String email) {
+        if (email == null) return false;
+
         String trimmed = email.trim();
-        if (trimmed.indexOf('@') == -1 || trimmed.indexOf('@', trimmed.indexOf('@') + 1) != -1) return false;
+        if (trimmed.isEmpty()) return false;
+
+        // Split by '@', there must be exactly one '@'
         String[] parts = trimmed.split("@");
+        if (parts.length != 2) return false;
+
         String local = parts[0];
         String domain = parts[1];
-        if (local.isEmpty() || domain.isEmpty()) return false;
-        if (local.startsWith(".") || local.endsWith(".") || local.startsWith("-") || local.endsWith("-")) return false;
-        if (local.contains("..")) return false;
-        for (char c : local.toCharArray()) {
-            if (!Character.isLetterOrDigit(c) && c != '.' && c != '_' && c != '%' && c != '+' && c != '-') return false;
-        }
-        if (!domain.contains(".")) return false;
+
+        // Local part rules
+        if (!local.matches("^[a-zA-Z0-9._%+-]+$")) return false; // valid chars
+        if (local.startsWith(".") || local.endsWith(".") || local.startsWith("-") || local.endsWith("-") || local.contains("..")) return false;
+
+        // Domain rules
         String[] labels = domain.split("\\.");
-        for (String label : labels) {
+        if (labels.length < 2) return false; // must have at least one dot
+
+        for (int i = 0; i < labels.length; i++) {
+            String label = labels[i];
             if (label.isEmpty()) return false;
             if (label.startsWith("-") || label.endsWith("-")) return false;
-            for (char c : label.toCharArray()) {
-                if (!Character.isLetterOrDigit(c) && c != '-') return false;
+
+            if (i == labels.length - 1) { // TLD
+                if (label.length() < 2 || !label.matches("^[a-zA-Z]+$")) return false;
+            } else {
+                if (!label.matches("^[a-zA-Z0-9-]+$")) return false;
             }
         }
-        String tld = labels[labels.length - 1];
-        if (tld.length() < 2) return false;
+
         return true;
     }
 
-    private static boolean isValidLocal(String local) {
-        if (local.isEmpty()) {
-            return false;
-        }
-
-        if (local.startsWith(".")|| local.endsWith(".")|| local.startsWith("-")|| local.endsWith("-")|| local.startsWith("+")|| local.endsWith("+")|| local.startsWith("&")|| local.endsWith("&")|| local.startsWith("*")|| local.endsWith("*")|| local.startsWith("_")|| local.endsWith("_")) {
-            return false;
-        }
-
-        if (local.contains("..")) {
-            return false;
-        }
-
-        for (char c:local.toCharArray()){
-            if (isValidLocalChars(c)==false){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isValidLocalChars(char c){
-        return( (c >= 'a' && c <= 'z') ||
-                (c >= 'A' && c <= 'Z') ||
-                (c >= '0' && c <= '9') ||
-                c == '.' || c == '_' || c == '+' || c == '&' || c == '*' || c == '-'
-              );
-    }
-
-    private static boolean isValidDomain(String domain) {
-        if (domain.isEmpty() || !domain.contains(".")) {
-            return false;
-        }
-        
-        String[] domainParts = domain.split("\\.");
-
-        if (domainParts.length < 2) {
-            return false;
-        }
-
-        for (int i = 0; i < domainParts.length; i++) {
-            String domainString = domainParts[i];
-
-            if (domainString.isEmpty()) {
-                return false;
-            }
-            if (domainString.startsWith("-")|| domainString.endsWith("-")) {
-                return false;
-            }
-            if (i == domainParts.length - 1) {
-                if(domainString.length() < 2) {
-                    return false;
-                }
-                if (!domainString.matches("[a-zA-Z]+")) {
-                return false;
-            }
-            else {
-                if (!domainString.matches("[a-zA-Z0-9-]+")) {
-                    return false;
-                }
-            }
-            }
-        }
-        return true;
-    }
 }
