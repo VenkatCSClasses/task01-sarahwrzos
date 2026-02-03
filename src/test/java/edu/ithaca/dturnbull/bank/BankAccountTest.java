@@ -138,12 +138,16 @@ class BankAccountTest {
 
     @Test
     void depositTest() {
+        // eq classes: valid input/ invalid input
+        // negative amounts, more than 2 decimal places
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
 
         assertEquals(200, bankAccount.getBalance(), 0.001);
 
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-100));
+        assertEquals(200, bankAccount.getBalance(), 0.001);
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(100.111));
+        assertEquals(200, bankAccount.getBalance(), 0.001);
 
         bankAccount.deposit(50);
         assertEquals(250, bankAccount.getBalance(), 0.001);
@@ -151,6 +155,8 @@ class BankAccountTest {
 
     @Test
     void transferTest() {
+        // eq classes: valid input/ invalid input
+        // negative amounts, more than 2 decimal places, more transferred than within account
         BankAccount bankAccount1 = new BankAccount("a@b.com", 300);
         BankAccount bankAccount2 = new BankAccount("a@b.com", 100);
 
@@ -162,6 +168,10 @@ class BankAccountTest {
         assertThrows(IllegalArgumentException.class, () -> bankAccount1.transfer(100.111, bankAccount2));
 
         assertThrows(IllegalArgumentException.class, () -> bankAccount1.transfer(300, bankAccount2));//too much transfered
+
+        //make sure nothing else was transferred 
+        assertEquals(250, bankAccount1.getBalance(), 0.001);
+        assertEquals(150, bankAccount2.getBalance(), 0.001);
 
     }
 

@@ -36,7 +36,12 @@ public class BankAccount {
      * adds to current balance
      */
     public void deposit (double amount){
-        return;
+        if (isAmountValid((float) amount)){
+            this.balance += amount;
+        }
+        else {
+            throw new IllegalArgumentException("amount not valid");
+        }
     }
 
     /**
