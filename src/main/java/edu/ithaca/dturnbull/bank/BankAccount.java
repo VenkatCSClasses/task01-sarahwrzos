@@ -31,6 +31,25 @@ public class BankAccount {
     }
 
     /**
+     * 
+     * @param amount: must be non negative and no more than 2 decimal places
+     * adds to current balance
+     */
+    public void deposit (double amount){
+        return;
+    }
+
+    /**
+     * 
+     * @param amount, must be valid
+     * this must have enough money
+     * moves money from this to other
+     */
+    public void transfer (double amount, BankAccount other){
+        return;
+    }
+
+    /**
      * @post reduces the balance by amount if amount is non-negative and smaller than balance
      * @throws InsufficientFundsException if the balance will become negative after withdraw
      * @throws IllegalArgumentException if the withdraw amount is negative

@@ -136,4 +136,33 @@ class BankAccountTest {
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("a@b.com", 100.111));
     }
 
+    @Test
+    void depositTest() {
+        BankAccount bankAccount = new BankAccount("a@b.com", 200);
+
+        assertEquals(200, bankAccount.getBalance(), 0.001);
+
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-100));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(100.111));
+
+        bankAccount.deposit(50);
+        assertEquals(250, bankAccount.getBalance(), 0.001);
+    }
+
+    @Test
+    void transferTest() {
+        BankAccount bankAccount1 = new BankAccount("a@b.com", 300);
+        BankAccount bankAccount2 = new BankAccount("a@b.com", 100);
+
+        bankAccount1.transfer(50, bankAccount2);
+        assertEquals(250, bankAccount1.getBalance(), 0.001);
+        assertEquals(150, bankAccount2.getBalance(), 0.001);
+
+        assertThrows(IllegalArgumentException.class, () -> bankAccount1.transfer(-100, bankAccount2));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount1.transfer(100.111, bankAccount2));
+
+        assertThrows(IllegalArgumentException.class, () -> bankAccount1.transfer(300, bankAccount2));//too much transfered
+
+    }
+
 }
