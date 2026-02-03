@@ -51,7 +51,13 @@ public class BankAccount {
      * moves money from this to other
      */
     public void transfer (double amount, BankAccount other){
-        return;
+        if (isAmountValid((float) amount) && amount <= this.balance){
+            this.balance -= amount;
+            other.balance += amount;
+        }
+        else{
+            throw new IllegalArgumentException("amount not valid");
+        }
     }
 
     /**
