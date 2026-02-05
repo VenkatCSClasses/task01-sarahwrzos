@@ -85,8 +85,8 @@ public class BankAccount {
      * 
      */
     public static boolean isAmountValid(float amount){
-        float scaled = amount * 100;
-        boolean decimal = Math.abs(scaled - Math.round(scaled)) < 0.0001;
+        float scaled = amount * 100; // isolate stuff after two places
+        boolean decimal = Math.abs(scaled - Math.round(scaled)) < 0.0001; // see if decimal is non zero
 
         if (amount >= 0 && decimal){
             return true;
