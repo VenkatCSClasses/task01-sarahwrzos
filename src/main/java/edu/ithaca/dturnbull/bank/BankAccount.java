@@ -34,6 +34,7 @@ public class BankAccount {
      * 
      * @param amount: must be non negative and no more than 2 decimal places
      * adds to current balance
+     * @throws IllegalArgumentException if amount not valid
      */
     public void deposit (double amount){
         if (isAmountValid((float) amount)){
