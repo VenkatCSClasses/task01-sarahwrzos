@@ -47,8 +47,9 @@ public class BankAccount {
     /**
      * 
      * @param amount, must be valid
-     * this must have enough money
-     * moves money from this to other
+     * this.balance must have enough money
+     * moves money from this to other.balance
+     * @throws IllegalArgumentException if amount not valid or balance too low
      */
     public void transfer (double amount, BankAccount other){
         if (isAmountValid((float) amount) && amount <= this.balance){
@@ -81,6 +82,7 @@ public class BankAccount {
      * 
      * @param amount
      * @return true if amount is positive and has two decimal points or less, false otherwise
+     * 
      */
     public static boolean isAmountValid(float amount){
         float scaled = amount * 100;
@@ -94,6 +96,11 @@ public class BankAccount {
         }
     }
 
+    /**
+     * 
+     * @param email
+     * @return true if email is valid, false otherwise
+     */
     public static boolean isEmailValid(String email) {
         if (email == null) return false;
 
@@ -108,22 +115,28 @@ public class BankAccount {
         String domain = parts[1];
 
         // Local part rules
-        if (!local.matches("^[a-zA-Z0-9._%+-]+$")) return false; // valid chars
-        if (local.startsWith(".") || local.endsWith(".") || local.startsWith("-") || local.endsWith("-") || local.contains("..")) return false;
+        if (!local.matches("^[a-zA-Z0-9._%+-]+$")) 
+            return false; // invalid chars
+        if (local.startsWith(".") || local.endsWith(".") || local.startsWith("-") || local.endsWith("-") || local.contains("..")) 
+            return false; // cannot start/end with certain chars
 
         // Domain rules
-        String[] labels = domain.split("\\.");
+        String[] labels = domain.split("\\."); // splits at '.'
         if (labels.length < 2) return false; // must have at least one dot
 
         for (int i = 0; i < labels.length; i++) {
             String label = labels[i];
-            if (label.isEmpty()) return false;
-            if (label.startsWith("-") || label.endsWith("-")) return false;
+            if (label.isEmpty()) // consecutive dots
+                return false;
+            if (label.startsWith("-") || label.endsWith("-")) // cannot start/end with hyphen
+                return false;
 
-            if (i == labels.length - 1) { // TLD
-                if (label.length() < 2 || !label.matches("^[a-zA-Z]+$")) return false;
-            } else {
-                if (!label.matches("^[a-zA-Z0-9-]+$")) return false;
+            if (i == labels.length - 1) { // get last part
+                if (label.length() < 2 || !label.matches("^[a-zA-Z]+$")) // the .com part must contain only letters
+                    return false;
+            } else { // rest of domain
+                if (!label.matches("^[a-zA-Z0-9-]+$")) 
+                    return false;
             }
         }
 
